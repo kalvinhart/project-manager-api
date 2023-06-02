@@ -1,3 +1,4 @@
+import { Organisation } from "src/organisation/schemas/organisation.schema";
 import { UserDocument } from "../schemas/user.schema";
 
 export class UserDto {
@@ -6,12 +7,12 @@ export class UserDto {
     this.name = user.name;
     this.email = user.email;
     this.roles = user.roles;
-    // this.organisations = user.organisations;
+    this.organisations = user.organisations;
   }
 
   _id: string;
   name: string;
   email: string;
   roles: string[];
-  // organisations: Organisation[];
+  organisations: Organisation[];
 }

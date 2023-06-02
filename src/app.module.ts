@@ -6,6 +6,7 @@ import { CoreModule } from "./modules/core/core.module";
 import { DatabaseModule } from "./modules/database/database.module";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
+import { OrganisationModule } from './organisation/organisation.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { AuthModule } from "./modules/auth/auth.module";
     }),
     DatabaseModule,
     UserModule,
-    AuthModule
+    AuthModule,
+    OrganisationModule
   ],
   controllers: [],
   providers: []
