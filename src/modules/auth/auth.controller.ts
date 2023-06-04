@@ -1,6 +1,7 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { UserDto } from "../user/dto/user.dto";
 import { AuthService } from "./auth.service";
+import { CreatePaidUserDto } from "./dto/create-paid-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { SignInResultDto } from "./dto/sign-in-result.dto";
 import { SignInDto } from "./dto/sign-in.dto";
@@ -11,21 +12,16 @@ export class AuthController {
 
   @Post("login")
   async signIn(@Body() signInDto: SignInDto): Promise<SignInResultDto> {
-    try {
-      return await this.authService.signIn(signInDto);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.authService.signIn(signInDto);
   }
 
   @Post("register")
+  async createPaidUser(@Body() createPaidUserDto: CreatePaidUserDto): Promise<UserDto> {
+    return await this.authService.createPaidUser(createPaidUserDto);
+  }
+
+  @Post("create")
   async createUser(@Body() createUserDto: CreateUserDto): Promise<UserDto> {
-    try {
-      return await this.authService.createUser(createUserDto);
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.authService.createUser(createUserDto);
   }
 }
