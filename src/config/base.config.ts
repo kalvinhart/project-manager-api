@@ -1,5 +1,5 @@
 import { registerAs } from "@nestjs/config";
-import { Config } from "src/modules/core/enums/Config";
+import { Config } from "src/core/enums/Config";
 
 export type BaseConfig = {
   port: number;
