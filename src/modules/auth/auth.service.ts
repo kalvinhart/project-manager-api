@@ -57,7 +57,7 @@ export class AuthService {
       password: passwordHash,
       roles,
       initialOrganisation: organisation,
-      organisations: { $push: { organisations: organisation } }
+      organisations: organisation
     });
 
     const savedUser = await newUser.save();
