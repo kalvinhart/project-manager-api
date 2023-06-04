@@ -7,6 +7,7 @@ import {
   Organisation,
   OrganisationSchema
 } from "src/modules/organisation/schemas/organisation.schema";
+import { OrganisationCreatedListener } from "./listeners/organisation-created.listener";
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import {
       { name: Organisation.name, schema: OrganisationSchema }
     ])
   ],
-  providers: [UserService],
+  providers: [UserService, OrganisationCreatedListener],
   controllers: [UserController],
   exports: [UserService]
 })

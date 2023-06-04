@@ -1,17 +1,21 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Model } from "mongoose";
 import { User } from "src/modules/user/schemas/user.schema";
 import { CreateOrganisationDto } from "./dto/create-organisation.dto";
 import { OrganisationDto } from "./dto/organisation.dto";
 import { UpdateOrganisationDto } from "./dto/update-organisation.dto";
 import { Organisation } from "./schemas/organisation.schema";
+import { OrganisationEvents } from "./enums/OrganisationEvents";
+import { OrganisationCreatedEvent } from "../user/events/organisation-created.event";
 
 @Injectable()
 export class OrganisationService {
   constructor(
     @InjectModel(Organisation.name) private organisationModel: Model<Organisation>,
-    @InjectModel(User.name) private userModel: Model<User>
+    @InjectModel(User.name) private userModel: Model<User>,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async checkNameAvailability(name: string): Promise<boolean> {
@@ -29,8 +33,12 @@ export class OrganisationService {
     });
 
     const savedOrganisation = await newOrganisation.save();
+    const organisation = new OrganisationDto(savedOrganisation);
 
-    return new OrganisationDto(savedOrganisation);
+    const organisationEvent = new OrganisationCreatedEvent(organisation);
+    this.eventEmitter.emit(OrganisationEvents.ORGANISATION_CREATED, organisationEvent);
+
+    return organisation;
   }
 
   async updateOrganisation(updateOrganisationDto: UpdateOrganisationDto): Promise<OrganisationDto> {

@@ -7,6 +7,7 @@ import { DatabaseModule } from "./database/database.module";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { OrganisationModule } from "./modules/organisation/organisation.module";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { OrganisationModule } from "./modules/organisation/organisation.module";
     DatabaseModule,
     UserModule,
     AuthModule,
-    OrganisationModule
+    OrganisationModule,
+    EventEmitterModule.forRoot()
   ],
   controllers: [],
   providers: []
