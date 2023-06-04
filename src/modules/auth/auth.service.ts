@@ -33,11 +33,12 @@ export class AuthService {
 
     const passwordHash = hashSync(password, 12);
 
-    const newUser = new this.userModel();
-    newUser.name = name;
-    newUser.email = email;
-    newUser.password = passwordHash;
-    newUser.roles = roles;
+    const newUser = new this.userModel({
+      name,
+      email,
+      password: passwordHash,
+      roles
+    });
 
     const savedUser = await newUser.save();
 
