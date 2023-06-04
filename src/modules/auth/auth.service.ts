@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async createUser(user: CreateUserDto): Promise<UserDto> {
-    const { name, email, password, roles } = user;
+    const { name, email, password, roles, organisation } = user;
 
     const existingUser: UserDocument = await this.userModel.findOne({ email });
     if (existingUser)
@@ -37,7 +37,8 @@ export class AuthService {
       name,
       email,
       password: passwordHash,
-      roles
+      roles,
+      organisations: { $push: { organisations: organisation } }
     });
 
     const savedUser = await newUser.save();
