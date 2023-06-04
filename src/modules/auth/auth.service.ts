@@ -11,6 +11,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { compareSync, hashSync } from "bcrypt";
 import { SignInResultDto } from "./dto/sign-in-result.dto";
 import { SignInDto } from "./dto/sign-in.dto";
+import { CreatePaidUserDto } from "./dto/create-paid-user.dto";
 
 @Injectable()
 export class AuthService {
@@ -24,26 +25,54 @@ export class AuthService {
     this.baseConfig = this.configService.get<BaseConfig>(Config.BASE);
   }
 
+  async createPaidUser(user: CreatePaidUserDto): Promise<UserDto> {
+    const { name, email, password, roles } = user;
+
+    await this.ensureUniqueUser(email);
+
+    const passwordHash = this.hashPassword(password);
+
+    const newUser = new this.userModel({
+      name,
+      email,
+      password: passwordHash,
+      roles
+    });
+
+    const savedUser = await newUser.save();
+
+    return new UserDto(savedUser);
+  }
+
   async createUser(user: CreateUserDto): Promise<UserDto> {
     const { name, email, password, roles, organisation } = user;
 
-    const existingUser: UserDocument = await this.userModel.findOne({ email });
-    if (existingUser)
-      throw new BadRequestException("A user with this email address already exists.");
+    await this.ensureUniqueUser(email);
 
-    const passwordHash = hashSync(password, 12);
+    const passwordHash = this.hashPassword(password);
 
     const newUser = new this.userModel({
       name,
       email,
       password: passwordHash,
       roles,
+      initialOrganisation: organisation,
       organisations: { $push: { organisations: organisation } }
     });
 
     const savedUser = await newUser.save();
 
     return new UserDto(savedUser);
+  }
+
+  async ensureUniqueUser(email: string): Promise<void> {
+    const existingUser: UserDocument = await this.userModel.findOne({ email });
+    if (existingUser)
+      throw new BadRequestException("A user with this email address already exists.");
+  }
+
+  hashPassword(password: string): string {
+    return hashSync(password, 12);
   }
 
   async signIn(userCredentials: SignInDto): Promise<SignInResultDto> {

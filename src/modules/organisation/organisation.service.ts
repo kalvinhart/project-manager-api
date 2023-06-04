@@ -26,10 +26,15 @@ export class OrganisationService {
   async createNewOrganisation(
     createOrganisationDto: CreateOrganisationDto
   ): Promise<OrganisationDto> {
-    // create the new organisation
+    const { name, owner } = createOrganisationDto;
+
+    const exists = await this.organisationModel.findOne({ name });
+    if (exists) throw new BadRequestException("Organisation already exists.");
+
     const newOrganisation = new this.organisationModel({
-      name: createOrganisationDto.name,
-      owner: createOrganisationDto.owner._id
+      name,
+      owner,
+      users: owner
     });
 
     const savedOrganisation = await newOrganisation.save();
