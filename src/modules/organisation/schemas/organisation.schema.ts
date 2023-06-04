@@ -6,6 +6,9 @@ export type OrganisationDocument = HydratedDocument<Organisation>;
 
 @Schema({ timestamps: true })
 export class Organisation {
+  @Prop()
+  _id: mongoose.Schema.Types.ObjectId;
+
   @Prop({ required: true, minlength: 3 })
   name: string;
 
