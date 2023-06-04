@@ -6,7 +6,6 @@ export type UserRoleDocument = HydratedDocument<UserRole>;
 
 @Schema()
 export class UserRole {
-  @Prop()
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: String, enum: UserRoles, default: UserRoles.USER })
