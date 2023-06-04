@@ -27,7 +27,7 @@ export class User {
   password: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: UserRole.name }] })
-  roles: UserRole;
+  roles: UserRole[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: Organisation.name }]
