@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 import { UserRole } from "../schemas/user-role.schema";
 import { UserDocument } from "../schemas/user.schema";
@@ -14,6 +15,6 @@ export class UserDto {
   _id: string;
   name: string;
   email: string;
-  roles: UserRole[];
-  organisations: Organisation[];
+  roles: UserRole[] | ObjectId[] | string[];
+  organisations: Organisation[] | ObjectId[] | string[];
 }

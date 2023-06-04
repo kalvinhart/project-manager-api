@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import mongoose, { HydratedDocument } from "mongoose";
+import mongoose, { HydratedDocument, ObjectId } from "mongoose";
 import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 import { UserRole } from "./user-role.schema";
 
@@ -27,12 +27,12 @@ export class User {
   password: string;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: UserRole.name }] })
-  roles: UserRole[];
+  roles: UserRole[] | ObjectId[] | string[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: Organisation.name }]
   })
-  organisations: Organisation[];
+  organisations: Organisation[] | ObjectId[] | string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

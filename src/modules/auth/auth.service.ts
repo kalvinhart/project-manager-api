@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async createUser(user: CreateUserDto): Promise<UserDto> {
-    const { email, password } = user;
+    const { name, email, password, roles } = user;
 
     const existingUser: UserDocument = await this.userModel.findOne({ email });
     if (existingUser)
@@ -34,8 +34,10 @@ export class AuthService {
     const passwordHash = hashSync(password, 12);
 
     const newUser = new this.userModel();
+    newUser.name = name;
     newUser.email = email;
     newUser.password = passwordHash;
+    newUser.roles = roles;
 
     const savedUser = await newUser.save();
 
