@@ -1,4 +1,4 @@
-import { UserDto } from "src/modules/user/DTOs/user.dto";
+import { UserDto } from "src/modules/user/dto/user.dto";
 
 export class CreateOrganisationDto {
   name: string;

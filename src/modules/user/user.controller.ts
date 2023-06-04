@@ -1,5 +1,5 @@
 import { Controller, Get, HttpException, HttpStatus, Param } from "@nestjs/common";
-import { UserDto } from "./DTOs/user.dto";
+import { UserDto } from "./dto/user.dto";
 import { UserService } from "./user.service";
 
 @Controller("user")

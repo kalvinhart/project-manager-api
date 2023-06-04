@@ -2,9 +2,9 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User } from "src/modules/user/schemas/user.schema";
-import { CreateOrganisationDto } from "./DTOs/create-organisation.dto";
-import { OrganisationDto } from "./DTOs/organisation.dto";
-import { UpdateOrganisationDto } from "./DTOs/update-organisation.dto";
+import { CreateOrganisationDto } from "./dto/create-organisation.dto";
+import { OrganisationDto } from "./dto/organisation.dto";
+import { UpdateOrganisationDto } from "./dto/update-organisation.dto";
 import { Organisation } from "./schemas/organisation.schema";
 
 @Injectable()

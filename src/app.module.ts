@@ -6,7 +6,7 @@ import { CoreModule } from "./modules/core/core.module";
 import { DatabaseModule } from "./modules/database/database.module";
 import { UserModule } from "./modules/user/user.module";
 import { AuthModule } from "./modules/auth/auth.module";
-import { OrganisationModule } from './organisation/organisation.module';
+import { OrganisationModule } from "./modules/organisation/organisation.module";
 
 @Module({
   imports: [

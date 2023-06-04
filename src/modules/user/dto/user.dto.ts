@@ -1,4 +1,4 @@
-import { Organisation } from "src/organisation/schemas/organisation.schema";
+import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 import { UserDocument } from "../schemas/user.schema";
 
 export class UserDto {

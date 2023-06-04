@@ -5,12 +5,12 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { BaseConfig } from "src/config/base.config";
 import { Config } from "../core/enums/Config";
-import { UserDto } from "../user/DTOs/user.dto";
+import { UserDto } from "../user/dto/user.dto";
 import { User, UserDocument } from "../user/schemas/user.schema";
-import { CreateUserDto } from "./DTOs/create-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 import { compareSync, hashSync } from "bcrypt";
-import { SignInResultDto } from "./DTOs/sign-in-result.dto";
-import { SignInDto } from "./DTOs/sign-in.dto";
+import { SignInResultDto } from "./dto/sign-in-result.dto";
+import { SignInDto } from "./dto/sign-in.dto";
 
 @Injectable()
 export class AuthService {
