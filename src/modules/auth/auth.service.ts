@@ -92,7 +92,7 @@ export class AuthService {
   async signIn(userCredentials: SignInDto): Promise<SignInResultDto> {
     const { email, password } = userCredentials;
 
-    const user: UserDocument = await this.userModel.findOne({ email });
+    const user: UserDocument = await this.userModel.findOne({ email }).populate("organisations");
     if (!user) throw new UnauthorizedException("Invalid username/password.");
 
     const match = compareSync(password, user.password);
