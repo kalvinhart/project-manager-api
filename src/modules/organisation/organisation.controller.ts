@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { CreateOrganisationDto } from "./dto/create-organisation.dto";
 import { OrganisationDto } from "./dto/organisation.dto";
 import { UpdateOrganisationDto } from "./dto/update-organisation.dto";
@@ -13,6 +13,11 @@ export class OrganisationController {
     @Body() createOrganisationDto: CreateOrganisationDto
   ): Promise<OrganisationDto> {
     return this.organisationService.createNewOrganisation(createOrganisationDto);
+  }
+
+  @Get(":id")
+  getOrganisationDetails(@Param("id") organisationId: string): Promise<OrganisationDto> {
+    return this.organisationService.getOrganisationDetails(organisationId);
   }
 
   @Post("/update")

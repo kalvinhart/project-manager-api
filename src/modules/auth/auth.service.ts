@@ -12,6 +12,9 @@ import { compareSync, hashSync } from "bcrypt";
 import { SignInResultDto } from "./dto/sign-in-result.dto";
 import { SignInDto } from "./dto/sign-in.dto";
 import { CreatePaidUserDto } from "./dto/create-paid-user.dto";
+import { EventEmitter2 } from "@nestjs/event-emitter";
+import { AuthEvents } from "./enums/AuthEvents";
+import { UserCreatedEvent } from "../user/events/user-created.event";
 
 @Injectable()
 export class AuthService {
@@ -20,7 +23,8 @@ export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private jwtService: JwtService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private eventEmitter: EventEmitter2
   ) {
     this.baseConfig = this.configService.get<BaseConfig>(Config.BASE);
   }
@@ -44,8 +48,8 @@ export class AuthService {
     return new UserDto(savedUser);
   }
 
-  async createUser(user: CreateUserDto): Promise<UserDto> {
-    const { name, email, password, roles, organisation } = user;
+  async createUser(createUserDto: CreateUserDto): Promise<UserDto> {
+    const { name, email, password, roles, organisation } = createUserDto;
 
     await this.ensureUniqueUser(email);
 
@@ -61,8 +65,18 @@ export class AuthService {
     });
 
     const savedUser = await newUser.save();
+    const populatedNewUser = await savedUser.populate([
+      "roles",
+      "initialOrganisation",
+      "organisations"
+    ]);
 
-    return new UserDto(savedUser);
+    const user = new UserDto(populatedNewUser);
+    const userEvent = new UserCreatedEvent(user);
+
+    this.eventEmitter.emit(AuthEvents.USER_CREATED, userEvent);
+
+    return user;
   }
 
   async ensureUniqueUser(email: string): Promise<void> {

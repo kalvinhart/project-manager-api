@@ -1,14 +1,16 @@
-import { User } from "src/modules/user/schemas/user.schema";
+import { UserDto } from "src/modules/user/dto/user.dto";
 import { Organisation, OrganisationDocument } from "../schemas/organisation.schema";
 
 export class OrganisationDto {
   constructor(organisation: OrganisationDocument | Organisation) {
-    this._id = organisation._id.toString();
+    this._id = organisation._id;
     this.name = organisation.name;
     this.owner = organisation.owner;
+    this.users = organisation.users;
   }
 
   _id: string;
   name: string;
-  owner: User;
+  owner: UserDto | string;
+  users: UserDto[] | string[];
 }

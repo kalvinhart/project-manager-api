@@ -11,7 +11,7 @@ export class OrganisationCreatedListener {
 
   @OnEvent(OrganisationEvents.ORGANISATION_CREATED, { async: true })
   async handleOrganisationCreated(payload: OrganisationCreatedEvent): Promise<void> {
-    const data = new AddOrganisationToUserDto(payload.owner._id, payload._id);
+    const data = new AddOrganisationToUserDto(payload.owner, payload._id);
 
     await this.userService.addOrganisationToUser(data);
     await this.userService.updateInitialOrganisation(data);

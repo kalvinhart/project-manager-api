@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Model } from "mongoose";
@@ -44,6 +44,16 @@ export class OrganisationService {
     this.eventEmitter.emit(OrganisationEvents.ORGANISATION_CREATED, organisationEvent);
 
     return organisation;
+  }
+
+  async getOrganisationDetails(organisationId: string): Promise<OrganisationDto> {
+    const organisation = await this.organisationModel
+      .findById(organisationId)
+      .populate("owner")
+      .populate("users");
+    if (!organisation) throw new NotFoundException("Organisation not found.");
+
+    return new OrganisationDto(organisation);
   }
 
   async updateOrganisation(updateOrganisationDto: UpdateOrganisationDto): Promise<OrganisationDto> {
