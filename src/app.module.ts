@@ -11,6 +11,8 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { JwtModule } from "@nestjs/jwt";
 import { ClientModule } from "./modules/client/client.module";
 import { Config } from "./core/enums/Config";
+import { ProjectModule } from "./modules/project/project.module";
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 
 @Module({
   imports: [
@@ -36,7 +38,11 @@ import { Config } from "./core/enums/Config";
     }),
     OrganisationModule,
     EventEmitterModule.forRoot(),
-    ClientModule
+    ClientModule,
+    ProjectModule,
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== "production"
+    })
   ],
   controllers: [],
   providers: []
