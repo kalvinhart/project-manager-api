@@ -1,11 +1,12 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Request } from "express";
-import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
+import { User } from "src/modules/user/schemas/user.schema";
+import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private configService: ConfigService, private jwtService: JwtService) {}
+  constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -14,11 +15,17 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get("JWT_KEY")
-      });
+      const userPayload: User = await this.jwtService.verifyAsync(token);
+      const organisationId = this.extractOrganisationIdFromHeader(request);
 
-      request.userId = payload.userId;
+      // Ensure the requested organisation is one of the user's organisations
+      const organisation = (userPayload.organisations as Organisation[]).find(
+        o => o._id === organisationId
+      );
+      if (!organisation) return false;
+
+      request.user = userPayload;
+      request.activeOrganisationId = organisationId;
     } catch (error) {
       throw new UnauthorizedException();
     }
@@ -29,5 +36,9 @@ export class AuthGuard implements CanActivate {
   extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(" ") ?? [];
     return type === "Bearer" ? token : undefined;
+  }
+
+  extractOrganisationIdFromHeader(request: Request): string {
+    return request.headers.organisationId as string;
   }
 }

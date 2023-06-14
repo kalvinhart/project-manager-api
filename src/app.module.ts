@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import baseConfig from "./config/base.config";
+import baseConfig, { BaseConfig } from "./config/base.config";
 import databaseConfig from "./config/database.config";
 import { CoreModule } from "./core/core.module";
 import { DatabaseModule } from "./database/database.module";
@@ -9,6 +9,8 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { OrganisationModule } from "./modules/organisation/organisation.module";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { JwtModule } from "@nestjs/jwt";
+import { ClientModule } from "./modules/client/client.module";
+import { Config } from "./core/enums/Config";
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { JwtModule } from "@nestjs/jwt";
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get("JWT_KEY"),
+        secret: configService.get<BaseConfig>(Config.BASE)?.jwtKey,
         signOptions: {
           expiresIn: "7d"
         }
@@ -33,7 +35,8 @@ import { JwtModule } from "@nestjs/jwt";
       global: true
     }),
     OrganisationModule,
-    EventEmitterModule.forRoot()
+    EventEmitterModule.forRoot(),
+    ClientModule
   ],
   controllers: [],
   providers: []
