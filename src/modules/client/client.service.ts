@@ -13,9 +13,9 @@ export class ClientService {
   constructor(@InjectModel(Client.name) private clientModel: Model<Client>) {}
 
   async createClient(createClientDto: CreateClientDto): Promise<ClientDto> {
-    const existingClient = await this.clientModel.find({
+    const existingClient = await this.clientModel.findOne({
       name: createClientDto.name,
-      organisation: createClientDto.organisationId
+      organisationId: createClientDto.organisationId
     });
     if (existingClient) throw new BadRequestException("A client with this name already exists.");
 
