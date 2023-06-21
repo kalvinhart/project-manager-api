@@ -20,9 +20,10 @@ export class AuthGuard implements CanActivate {
 
       // Ensure the requested organisation is one of the user's organisations
       const organisation = (userPayload.organisations as Organisation[]).find(
-        o => o._id === organisationId
+        org => org._id === organisationId
       );
-      if (!organisation) return false;
+      if (!organisation)
+        throw new UnauthorizedException("Not authorised to perform actions on this organisation.");
 
       request.user = userPayload;
       request.activeOrganisationId = organisationId;
@@ -39,6 +40,6 @@ export class AuthGuard implements CanActivate {
   }
 
   extractOrganisationIdFromHeader(request: Request): string {
-    return request.headers.organisationId as string;
+    return request.headers.organisationid as string;
   }
 }

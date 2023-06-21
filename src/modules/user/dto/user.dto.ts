@@ -1,9 +1,9 @@
 import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 import { UserRole } from "../schemas/user-role.schema";
-import { User, UserDocument } from "../schemas/user.schema";
+import { User } from "../schemas/user.schema";
 
 export class UserDto {
-  constructor(user: UserDocument | User) {
+  constructor(user: User) {
     this._id = user._id;
     this.name = user.name;
     this.email = user.email;

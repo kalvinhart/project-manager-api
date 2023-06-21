@@ -1,4 +1,3 @@
-import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 import { Client } from "../schemas/client.schema";
 
 export class ClientDto {
@@ -8,7 +7,7 @@ export class ClientDto {
     this.contactName = client.contactName;
     this.contactEmail = client.contactEmail;
     this.contactNumber = client.contactNumber;
-    this.organisation = client.organisation;
+    this.organisationId = client.organisationId;
   }
 
   _id: string;
@@ -16,5 +15,5 @@ export class ClientDto {
   contactName: string;
   contactEmail: string;
   contactNumber: string;
-  organisation: Organisation | string;
+  organisationId: string;
 }

@@ -12,12 +12,10 @@ export class Organisation {
   @Prop({ required: true, minlength: 3, unique: true })
   name: string;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Prop({ type: Types.ObjectId, ref: "User", required: true })
   owner: User | string;
 
-  @Prop({
-    type: [{ type: Types.ObjectId, ref: User.name }]
-  })
+  @Prop({ type: [{ type: Types.ObjectId, ref: "User" }] })
   users: User[] | string[];
 
   @Prop({ type: [{ type: Types.ObjectId, ref: Client.name }] })

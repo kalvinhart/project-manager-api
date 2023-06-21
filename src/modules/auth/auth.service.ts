@@ -92,19 +92,20 @@ export class AuthService {
   async signIn(userCredentials: SignInDto): Promise<SignInResultDto> {
     const { email, password } = userCredentials;
 
-    const user: UserDocument = await this.userModel.findOne({ email }).populate("organisations");
+    const user: UserDocument = await this.userModel
+      .findOne({ email })
+      .populate("organisations")
+      .lean();
     if (!user) throw new UnauthorizedException("Invalid username/password.");
 
     const match = compareSync(password, user.password);
     if (!match) throw new UnauthorizedException("Invalid username/password.");
 
-    const payload = {
-      userId: user._id
-    };
+    const token = await this.jwtService.signAsync(user, {
+      secret: this.baseConfig.jwtKey
+    });
 
     const userResult = new UserDto(user);
-
-    const token = await this.jwtService.signAsync(payload, { secret: this.baseConfig.jwtKey });
 
     return new SignInResultDto(userResult, token);
   }
