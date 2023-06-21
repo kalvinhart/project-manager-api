@@ -26,7 +26,7 @@ export class ClientService {
   }
 
   async getAllClients(organisationId: string): Promise<ClientDto[]> {
-    const clients = await this.clientModel.find({ organisation: organisationId });
+    const clients = await this.clientModel.find({ organisationId });
 
     return clients.map(client => new ClientDto(client));
   }
