@@ -12,7 +12,7 @@ export class ProjectService {
 
   public async getAllProjectsByOrganisation(activeOrganisationId: string): Promise<ProjectDto[]> {
     const projects = await this.projectModel
-      .find({ organisation: activeOrganisationId })
+      .find({ organisationId: activeOrganisationId })
       .populate("client");
 
     return projects.map(project => new ProjectDto(project));
@@ -23,7 +23,7 @@ export class ProjectService {
     activeOrganisationId: string
   ): Promise<ProjectDto | null> {
     const project = await this.projectModel
-      .findOne({ _id: projectId, organisation: activeOrganisationId })
+      .findOne({ _id: projectId, organisationId: activeOrganisationId })
       .populate("client");
     if (!project) throw new NotFoundException("Project not found.");
 
@@ -36,7 +36,7 @@ export class ProjectService {
   ): Promise<ProjectDto[] | null> {
     const projects = await this.projectModel.find({
       client: clientId,
-      organisation: activeOrganisationId
+      organisationId: activeOrganisationId
     });
 
     return projects.map(project => new ProjectDto(project));
@@ -56,7 +56,7 @@ export class ProjectService {
 
   public async updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectDto | null> {
     const updatedProject = await this.projectModel.findOneAndUpdate(
-      { _id: updateProjectDto._id, organisation: updateProjectDto.organisationId },
+      { _id: updateProjectDto._id, organisationId: updateProjectDto.organisationId },
       updateProjectDto,
       { new: true, runValidators: true }
     );

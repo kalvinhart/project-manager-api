@@ -34,7 +34,10 @@ export class ClientService {
   async getClientById(getClientDto: GetClientDto): Promise<ClientDto> {
     const { clientId, organisationId } = getClientDto;
 
-    const client = await this.clientModel.findOne({ _id: clientId, organisation: organisationId });
+    const client = await this.clientModel.findOne({
+      _id: clientId,
+      organisationId: organisationId
+    });
     if (!client) throw new NotFoundException("Client not found.");
 
     return new ClientDto(client);
@@ -60,7 +63,7 @@ export class ClientService {
     const { clientId, projectId, organisationId } = updateClientProjectsDto;
 
     await this.clientModel.findOneAndUpdate(
-      { _id: clientId, organisation: organisationId },
+      { _id: clientId, organisationId: organisationId },
       { $push: { projects: projectId } },
       { new: true, runValidators: true }
     );
