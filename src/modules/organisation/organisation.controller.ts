@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { UseGuards } from "@nestjs/common/decorators";
+import { Put, UseGuards } from "@nestjs/common/decorators";
 import { AuthGuard } from "src/guards/auth/auth.guard";
 import { CreateOrganisationDto } from "./dto/create-organisation.dto";
 import { OrganisationDto } from "./dto/organisation.dto";
@@ -23,7 +23,7 @@ export class OrganisationController {
     return this.organisationService.getOrganisationDetails(organisationId);
   }
 
-  @Post("/update")
+  @Put("/update")
   updateOrganisation(@Body() updateOrganisationDto: UpdateOrganisationDto) {
     return this.organisationService.updateOrganisation(updateOrganisationDto);
   }
