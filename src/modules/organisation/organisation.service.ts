@@ -9,6 +9,7 @@ import { UpdateOrganisationDto } from "./dto/update-organisation.dto";
 import { Organisation } from "./schemas/organisation.schema";
 import { OrganisationEvents } from "./enums/OrganisationEvents";
 import { OrganisationCreatedEvent } from "../user/events/organisation-created.event";
+import { OrganisationDetailsDto } from "./dto/organisation-details.dto";
 
 @Injectable()
 export class OrganisationService {
@@ -46,14 +47,14 @@ export class OrganisationService {
     return organisation;
   }
 
-  async getOrganisationDetails(organisationId: string): Promise<OrganisationDto> {
+  async getOrganisationDetails(organisationId: string): Promise<OrganisationDetailsDto> {
     const organisation = await this.organisationModel
       .findById(organisationId)
       .populate("owner")
       .populate("users");
     if (!organisation) throw new NotFoundException("Organisation not found.");
 
-    return new OrganisationDto(organisation);
+    return new OrganisationDetailsDto(organisation);
   }
 
   async updateOrganisation(updateOrganisationDto: UpdateOrganisationDto): Promise<OrganisationDto> {
