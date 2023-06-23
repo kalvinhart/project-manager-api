@@ -5,8 +5,9 @@ import { CreateOrganisationDto } from "./dto/create-organisation.dto";
 import { OrganisationDto } from "./dto/organisation.dto";
 import { UpdateOrganisationDto } from "./dto/update-organisation.dto";
 import { OrganisationService } from "./organisation.service";
+import { OrganisationGuard } from "src/guards/organisation/organisation.guard";
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, OrganisationGuard)
 @Controller("organisation")
 export class OrganisationController {
   constructor(private organisationService: OrganisationService) {}

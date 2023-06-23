@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Request } from "express";
 import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 
@@ -14,7 +14,7 @@ export class OrganisationGuard implements CanActivate {
     const organisation = (user.organisations as Organisation[]).find(
       org => org._id === organisationId
     );
-    if (!organisation) return false;
+    if (!organisation) throw new UnauthorizedException("Unauthorised to access this organisation.");
 
     request.activeOrganisationId = organisationId;
 
