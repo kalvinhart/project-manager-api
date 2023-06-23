@@ -42,8 +42,11 @@ export class ProjectService {
     return projects.map(project => new ProjectDto(project));
   }
 
-  public async createNewProject(createProjectDto: CreateProjectDto): Promise<ProjectDto | null> {
-    const newProject = new this.projectModel(createProjectDto);
+  public async createNewProject(
+    createProjectDto: CreateProjectDto,
+    organisationId: string
+  ): Promise<ProjectDto | null> {
+    const newProject = new this.projectModel({ organisationId, ...createProjectDto });
     const savedProject = await newProject.save();
 
     return new ProjectDto(savedProject);
@@ -54,9 +57,12 @@ export class ProjectService {
     // );
   }
 
-  public async updateProject(updateProjectDto: UpdateProjectDto): Promise<ProjectDto | null> {
+  public async updateProject(
+    updateProjectDto: UpdateProjectDto,
+    organisationId: string
+  ): Promise<ProjectDto | null> {
     const updatedProject = await this.projectModel.findOneAndUpdate(
-      { _id: updateProjectDto._id, organisationId: updateProjectDto.organisationId },
+      { _id: updateProjectDto._id, organisationId },
       updateProjectDto,
       { new: true, runValidators: true }
     );

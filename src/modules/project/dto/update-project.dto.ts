@@ -5,5 +5,4 @@ export class UpdateProjectDto {
   startDate?: Date;
   endDate?: Date;
   clientId: string;
-  organisationId: string;
 }

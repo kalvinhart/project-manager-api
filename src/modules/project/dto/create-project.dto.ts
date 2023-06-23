@@ -4,5 +4,4 @@ export class CreateProjectDto {
   startDate: Date;
   endDate: Date;
   clientId: string;
-  organisationId: string;
 }

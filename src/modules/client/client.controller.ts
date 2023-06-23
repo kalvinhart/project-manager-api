@@ -5,16 +5,17 @@ import { ClientService } from "./client.service";
 import { CreateClientDto } from "./dto/create-client.dto";
 import { GetClientDto } from "./dto/get-client.dto";
 import { UpdateClientDto } from "./dto/update-client.dto";
+import { OrganisationGuard } from "src/guards/organisation/organisation.guard";
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, OrganisationGuard)
 @Controller("client")
 export class ClientController {
   constructor(private clientService: ClientService) {}
 
   @Get("/")
   getAll(@Req() request: Request) {
-    const organisationId = request.activeOrganisationId;
-    return this.clientService.getAllClients(organisationId);
+    const { activeOrganisationId } = request;
+    return this.clientService.getAllClients(activeOrganisationId);
   }
 
   @Get("/:clientId")

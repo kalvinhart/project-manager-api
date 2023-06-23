@@ -4,8 +4,9 @@ import { ProjectService } from "./project.service";
 import { CreateProjectDto } from "./dto/create-project.dto";
 import { UpdateProjectDto } from "./dto/update-project.dto";
 import { Request } from "express";
+import { OrganisationGuard } from "src/guards/organisation/organisation.guard";
 
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, OrganisationGuard)
 @Controller("project")
 export class ProjectController {
   constructor(private projectService: ProjectService) {}
@@ -13,31 +14,30 @@ export class ProjectController {
   @Get("/")
   getAllProjectsByOrganisation(@Req() request: Request) {
     const { activeOrganisationId } = request;
-
     return this.projectService.getAllProjectsByOrganisation(activeOrganisationId);
   }
 
   @Get("/:id")
   getProjectById(@Param("id") projectId: string, @Req() request: Request) {
     const { activeOrganisationId } = request;
-
     return this.projectService.getProjectById(projectId, activeOrganisationId);
   }
 
   @Get("/client/:id")
   getProjectsByClient(@Param("id") clientId: string, @Req() request: Request) {
     const { activeOrganisationId } = request;
-
     return this.projectService.getAllProjectsByClient(clientId, activeOrganisationId);
   }
 
   @Post("/")
-  createProject(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.createNewProject(createProjectDto);
+  createProject(@Body() createProjectDto: CreateProjectDto, @Req() request: Request) {
+    const { activeOrganisationId } = request;
+    return this.projectService.createNewProject(createProjectDto, activeOrganisationId);
   }
 
   @Put("/:id")
-  updateProject(@Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectService.updateProject(updateProjectDto);
+  updateProject(@Body() updateProjectDto: UpdateProjectDto, @Req() request: Request) {
+    const { activeOrganisationId } = request;
+    return this.projectService.updateProject(updateProjectDto, activeOrganisationId);
   }
 }
