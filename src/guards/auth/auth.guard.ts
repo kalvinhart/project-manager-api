@@ -2,7 +2,6 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Request } from "express";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "src/modules/user/schemas/user.schema";
-import { Organisation } from "src/modules/organisation/schemas/organisation.schema";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,17 +15,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const userPayload: User = await this.jwtService.verifyAsync(token);
-      const organisationId = this.extractOrganisationIdFromHeader(request);
-
-      // Ensure the requested organisation is one of the user's organisations
-      const organisation = (userPayload.organisations as Organisation[]).find(
-        org => org._id === organisationId
-      );
-      if (!organisation)
-        throw new UnauthorizedException("Not authorised to perform actions on this organisation.");
-
       request.user = userPayload;
-      request.activeOrganisationId = organisationId;
     } catch (error) {
       throw new UnauthorizedException();
     }
@@ -37,9 +26,5 @@ export class AuthGuard implements CanActivate {
   extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(" ") ?? [];
     return type === "Bearer" ? token : undefined;
-  }
-
-  extractOrganisationIdFromHeader(request: Request): string {
-    return request.headers.organisationid as string;
   }
 }
